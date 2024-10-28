@@ -1,0 +1,29 @@
+### Get all
+GET http://localhost:3000/api/tatuador
+
+### Get one
+GET http://localhost:3000/api/tatuador/39453700
+
+### Post
+# @name createTatuador
+POST http://localhost:3000/api/tatuador
+Content-Type: application/json
+
+{
+    "dni": 39999999,
+    "nombreCompleto": "AAA",
+    "email": "betesjoaquin@gmail.com",
+    "telefono": "03413041923",
+    "redesSociales": "-"
+}
+
+### Update
+PUT http://localhost:3000/api/tatuador/39453700
+Content-Type: application/json
+
+{
+    "redesSociales": "@jojoaquin"
+}
+
+### Delete
+DELETE  http://localhost:3000/api/tatuador/39453777

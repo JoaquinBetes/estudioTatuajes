@@ -1,0 +1,32 @@
+### Get all
+GET http://localhost:3000/api/disenio
+
+### Get one
+GET http://localhost:3000/api/disenio/1
+
+### Post
+# @name createdisenio
+POST http://localhost:3000/api/disenio
+Content-Type: application/json
+
+{
+"codigo": 1,
+"tatuador_dni": 39999999,
+"tamaño_aproximado": 10,
+"imagen": "https://static.vecteezy.com/system/resources/thumbnails/001/227/500/small_2x/traditional-rose-and-dagger-tattoo-design.jpg",
+"precio_base": 15000.50,
+"descuento": 0.25,
+"precio_final": 20000, 
+"colores": "ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ"
+}
+
+### Update
+PUT http://localhost:3000/api/disenio/1
+Content-Type: application/json
+
+{
+    "colores": "amarillo, negro, azul"
+}
+
+### Delete
+DELETE http://localhost:3000/api/disenio/7

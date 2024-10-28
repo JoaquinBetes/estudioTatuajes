@@ -1,0 +1,27 @@
+### Get all
+GET http://localhost:3000/api/politicas
+
+### Get one
+GET http://localhost:3000/api/politicas/1
+
+### Post
+# @name createPoliticas
+POST http://localhost:3000/api/politicas
+Content-Type: application/json
+
+{
+    "precio_base_minimo": 8000.0,
+    "descuento_maximo": 0.50,
+    "comisiones_estudio": 0.40
+}
+
+### Update
+PUT http://localhost:3000/api/politicas/1
+Content-Type: application/json
+
+{
+    "comisionesEstudio": 0.45
+}
+
+### Delete
+DELETE http://localhost:3000/api/politicas/2

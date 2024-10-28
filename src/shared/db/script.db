@@ -1,0 +1,64 @@
+create database tattoo;
+
+CREATE TABLE `tattoo`.`tatuador` (
+  `dni` INT NOT NULL,
+  `nombreCompleto` VARCHAR(60) NULL,
+  `email` VARCHAR(40) NULL,
+  `telefono` VARCHAR(20) NULL,
+  `redesSociales` VARCHAR(400) NULL,
+  PRIMARY KEY (`dni`));
+
+CREATE TABLE `tattoo`.`liquidacion` (
+  `id` INT NOT NULL,
+  `dniTatuador` INT NOT NULL,
+  `fechaLiquidacion` DATE NULL,
+  `fechaFinLiquidacion` DATE NULL,
+  `valorTotal` FLOAT NULL,
+  PRIMARY KEY (`id`));
+  
+  ALTER TABLE `tattoo`.`liquidacion` 
+ADD INDEX `fk_liquidacion_tat_idx` (`dniTatuador` ASC) VISIBLE;
+;
+ALTER TABLE `tattoo`.`liquidacion` 
+ADD CONSTRAINT `fk_liquidacion_tat`
+  FOREIGN KEY (`dniTatuador`)
+  REFERENCES `tattoo`.`tatuador` (`dni`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  
+  CREATE TABLE `tattoo`.`categoria` (
+  `codigo` INT NOT NULL,
+  `descripcion` VARCHAR(250) NOT NULL,
+  PRIMARY KEY (`codigo`));
+
+  CREATE TABLE `tattoo`.`diseño` (
+  `id` INT NOT NULL,
+  `dniTatuador` INT NOT NULL,
+  `codigoCategoria` INT NOT NULL,
+  `tamañoAproximado` INT NULL,
+  `imagen` VARCHAR(400) NULL,
+  `precioBase` FLOAT NULL,
+  `descuento` FLOAT NULL,
+  `precioFinal` INT NULL,
+  `colores` VARCHAR(300) NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_diseño_tat_idx` (`dniTatuador` ASC) VISIBLE,
+  INDEX `fk_diseño_cat_idx` (`codigoCategoria` ASC) VISIBLE,
+  CONSTRAINT `fk_diseño_tat`
+    FOREIGN KEY (`dniTatuador`)
+    REFERENCES `tattoo`.`tatuador` (`dni`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_diseño_cat`
+    FOREIGN KEY (`codigoCategoria`)
+    REFERENCES `tattoo`.`categoria` (`codigo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+    CREATE TABLE `tattoo`.`cliente` (
+  `dni` INT NOT NULL,
+  `nombreCompleto` VARCHAR(60) NULL,
+  `email` VARCHAR(40) NULL,
+  `telefono` VARCHAR(20) NULL,
+  `estado` INT NULL,
+  PRIMARY KEY (`dni`));
