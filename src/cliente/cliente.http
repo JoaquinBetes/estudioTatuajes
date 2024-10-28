@@ -1,0 +1,29 @@
+### Get all
+GET http://localhost:3000/api/cliente
+
+### Get one
+GET http://localhost:3000/api/cliente/39453701
+
+### Post
+# @name createCliente
+POST http://localhost:3000/api/cliente
+Content-Type: application/json
+
+{
+    "dni": 39453711,
+    "nombreCompleto": "FALOPA",
+    "email": "vetesjoaquin@gmail.com",
+    "telefono": "03413041923",
+    "estado": 1
+}
+
+### Update
+PUT http://localhost:3000/api/cliente/39453701
+Content-Type: application/json
+
+{
+    "estado": 2
+}
+
+### Delete
+DELETE  http://localhost:3000/api/cliente/39453711

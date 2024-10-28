@@ -1,0 +1,25 @@
+### Get all
+GET http://localhost:3000/api/categoria
+
+### Get one
+GET http://localhost:3000/api/categoria/1
+
+### Post
+# @name createCategoria
+POST http://localhost:3000/api/categoria
+Content-Type: application/json
+
+{
+    "descripcion": "Caricatura"
+}
+
+### Update
+PUT http://localhost:3000/api/categoria/2
+Content-Type: application/json
+
+{
+    "descripcion": "Tradicional Japones"
+}
+
+### Delete
+DELETE http://localhost:3000/api/categoria/1

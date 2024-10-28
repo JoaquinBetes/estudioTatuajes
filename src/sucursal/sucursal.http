@@ -1,0 +1,29 @@
+### Get all
+GET http://localhost:3000/api/sucursal
+
+### Get one
+GET http://localhost:3000/api/sucursal/1
+
+### Post
+# @name createsucursal
+POST http://localhost:3000/api/sucursal
+Content-Type: application/json
+
+{
+    "pais": "RUSIA",
+    "localidad": "Rosario",
+    "direccion": "Juan Manuel de Rosas 1845",
+    "departamento": "C",
+    "piso": 6
+}
+
+### Update
+PUT http://localhost:3000/api/sucursal/1
+Content-Type: application/json
+
+{
+    "piso": 3
+}
+
+### Delete
+DELETE http://localhost:3000/api/sucursal/2

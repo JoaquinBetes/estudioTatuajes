@@ -1,0 +1,28 @@
+### Get all
+GET http://localhost:3000/api/liquidacion
+
+### Get one
+GET http://localhost:3000/api/liquidacion/1
+
+### Post
+# @name createliquidacion
+POST http://localhost:3000/api/liquidacion
+Content-Type: application/json
+
+{
+  "tatuador_dni": 39453777,
+  "fecha_inicio_liquidacion": "2024-10-01",
+  "fecha_fin_liquidacion": "2024-10-31",
+  "valor_total": 7
+}
+
+### Update
+PUT http://localhost:3000/api/liquidacion/1
+Content-Type: application/json
+
+{
+  "fechaFinLiquidacion": "2024-10-27"
+}
+
+### Delete
+DELETE http://localhost:3000/api/liquidacion/2
