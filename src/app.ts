@@ -1,17 +1,17 @@
 import 'reflect-metadata';
 import express from "express";
 
-import { categoriaRouter } from './categoria/categoria.routes.js';
-import { tatuadorRouter } from './tatuador/tatuador.routes.js';
-import { clienteRouter } from './cliente/cliente.routes.js';
-import { diseñoRouter } from './diseño/diseño.route.js';
-import { liquidacionRouter } from './liquidacion/liquidacion.routes.js';
-import { turnoRouter } from './turno/turno.routes.js';
-import { politicasRouter } from './politicas/politicas.routes.js';
-import { sucursalRouter } from './sucursal/sucursal.routes.js';
-import { horariosAtencionRouter } from './horariosAtencion/horariosAtencion.routes.js'; 
+import { categoriaRouter } from './api/categoria/categoria.routes.js';
+import { tatuadorRouter } from './api/tatuador/tatuador.routes.js';
+import { clienteRouter } from './api/cliente/cliente.routes.js';
+import { diseñoRouter } from './api/diseño/diseño.route.js';
+import { liquidacionRouter } from './api/liquidacion/liquidacion.routes.js';
+import { turnoRouter } from './api/turno/turno.routes.js';
+import { politicasRouter } from './api/politicas/politicas.routes.js';
+import { sucursalRouter } from './api/sucursal/sucursal.routes.js';
+import { horariosAtencionRouter } from './api/horariosAtencion/horariosAtencion.routes.js'; 
 
-import { orm, syncSchema } from './shared/db/orm.js';
+import { orm, syncSchema } from './api/shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 
 const app = express();

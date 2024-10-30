@@ -11,7 +11,7 @@ Content-Type: application/json
 
 {
 "codigo": 1,
-"tatuador_dni": 39999999,
+"tatuador_dni": 39453700,
 "tamaño_aproximado": 10,
 "imagen": "https://static.vecteezy.com/system/resources/thumbnails/001/227/500/small_2x/traditional-rose-and-dagger-tattoo-design.jpg",
 "precio_base": 15000.50,
@@ -29,4 +29,4 @@ Content-Type: application/json
 }
 
 ### Delete
-DELETE http://localhost:3000/api/disenio/7
+DELETE http://localhost:3000/api/disenio/8
