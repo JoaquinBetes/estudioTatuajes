@@ -1,6 +1,7 @@
 import {Request, Response, NextFunction} from 'express'
 import { orm } from '../shared/db/orm.js'
 import { Cliente } from './cliente.entity.js'
+import { controlPK, controlEmail, controlTelyPass, controlDni } from '../shared/reglas.js'
 
 const em = orm.em
 
@@ -28,11 +29,35 @@ async function findOne(req: Request, res: Response){
 
 async function add(req: Request, res: Response) {
   try {
-      const cliente = em.create(Cliente, req.body)
-      await em.flush()
-      res.status(201).json({ message: 'cliente added succesfully' , data: cliente })
+    const dniValida = await controlDni(Cliente, req.body.dni.toString())
+    if (!dniValida) {
+      return res.status(409).json({ message: 'El DNI ingresado no es valido' });
+    }
+    // Verifica si el cliente existe por DNI
+    const dniDisponible = await controlPK(Cliente, req.body.dni);
+    if (!dniDisponible) {
+      return res.status(409).json({ message: 'El cliente ya está registrado con este DNI' });
+    }
+    // Verifica si el email ya está registrado
+    const emailDisponible = await controlEmail(Cliente, req.body.email);
+    if (!emailDisponible) {
+      return res.status(409).json({ message: 'El email ya está registrado' });
+    }
+    const telefonoValido = await controlTelyPass(Cliente, req.body.telefono.toString())
+    if (!telefonoValido) {
+      return res.status(409).json({ message: 'El telefono ingresado no es valido' });
+    }
+    const contraseñaValida = await controlTelyPass(Cliente, req.body.contraseña)
+    if (!contraseñaValida) {
+      return res.status(409).json({ message: 'La contraseña ingresada no es valida' });
+    }
+    // Si ambos están disponibles, crea el cliente
+    const cliente = em.create(Cliente, req.body);
+    await em.flush();
+    res.status(201).json({ message: 'El cliente fue registrado exitosamente', data: cliente });
+    
   } catch (error: any) {
-    res.status(500).json({ message: error.message})
+    res.status(500).json({ message: error.message });
   }
 }
 

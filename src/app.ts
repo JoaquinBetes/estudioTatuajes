@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express from "express";
+import cors from 'cors';
 
 import { categoriaRouter } from './api/categoria/categoria.routes.js';
 import { tatuadorRouter } from './api/tatuador/tatuador.routes.js';
@@ -15,6 +16,7 @@ import { orm, syncSchema } from './api/shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 
 const app = express();
+app.use(cors())
 app.use(express.json());
 
 // Luego de middlewares base

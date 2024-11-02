@@ -10,7 +10,7 @@ POST http://localhost:3000/api/tatuador
 Content-Type: application/json
 
 {
-    "dni": 39999999,
+    "dni": 99999999,
     "nombreCompleto": "AAA",
     "email": "betesjoaquin@gmail.com",
     "telefono": "03413041923",
@@ -18,11 +18,11 @@ Content-Type: application/json
 }
 
 ### Update
-PUT http://localhost:3000/api/tatuador/39453700
+PUT http://localhost:3000/api/tatuador/39999999
 Content-Type: application/json
 
 {
-    "redesSociales": "@jojoaquin"
+    "contraseña": "Genius123"
 }
 
 ### Delete

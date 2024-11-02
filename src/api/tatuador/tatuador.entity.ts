@@ -26,6 +26,9 @@ export class Tatuador {
   @OneToMany( () => Diseño, diseño => diseño.tatuador, { cascade: [Cascade.REMOVE] })
   diseños = new Collection<Diseño>(this);
 
+  @Property({ type: 'string', length: 20, nullable:false }) 
+  contraseña!: string;
+
   @OneToMany( () => Turno, turno => turno.tatuador, { cascade: [Cascade.REMOVE] })
   turnos = new Collection<Turno>(this);
 

@@ -18,6 +18,9 @@ export class Cliente {
   @Property({ type: 'int' }) 
   estado!: number;
 
+  @Property({ type: 'string', length: 20, nullable:false}) 
+  contraseña!: string;
+
   @OneToMany( () => Turno, turno => turno.cliente, { cascade: [Cascade.REMOVE] })
   turnos = new Collection<Turno>(this);
 
