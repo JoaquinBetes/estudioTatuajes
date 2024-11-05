@@ -1,6 +1,10 @@
 import {Request, Response, NextFunction} from 'express'
 import { orm } from '../shared/db/orm.js'
+import { controlDni, controlEmail, controlPK, controlTelyPass,isValidEmailFormat, controlRedes } from '../shared/reglas.js'
+import { Turno } from '../turno/turno.entity.js'
 import { Tatuador } from './tatuador.entity.js'
+import { Liquidacion } from '../liquidacion/liquidacion.entity.js'
+import { Diseño } from '../diseño/diseño.entity.js'
 
 const em = orm.em
 
@@ -38,18 +42,50 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
-    const dni = Number.parseInt(req.params.dni)
-    const tatuador = await em.findOne(Tatuador, {dni} )
+    const dniActual = Number(req.params.dni);
+    const tatuador = await em.findOne(Tatuador, { dni: dniActual });
+
     if (!tatuador) {
-      return res.status(404).json({ message: 'tatuador not found' });
+      return res.status(404).json({ message: 'Tatuador no encontrado' });
     }
+
+    // Extraer los datos del cuerpo de la petición
+    const { dni: nuevoDni, email, telefono, contraseña, redesSociales } = req.body;
+
+    // Actualizar el DNI solo si se proporciona un nuevo DNI
+    if (nuevoDni) {
+      if (!(await controlDni(Tatuador, nuevoDni.toString()))) {
+        return res.status(409).json({ message: 'El nuevo DNI ingresado no es válido' });
+      }
+
+      if (nuevoDni !== dniActual && !(await controlPK(Tatuador, nuevoDni))) {
+        return res.status(409).json({ message: 'El nuevo DNI ya está registrado en otro tatuador' });
+      }
+
+      // Actualiza el DNI en el tatuador
+      tatuador.dni = nuevoDni;
+
+      // Actualiza las entidades relacionadas
+      await em.nativeUpdate(Liquidacion, { tatuador: { dni: dniActual } }, nuevoDni );
+      await em.nativeUpdate(Diseño, { tatuador: { dni: dniActual } },  nuevoDni  );
+      await em.nativeUpdate(Turno, { tatuador: { dni: dniActual } }, nuevoDni );
+    }
+
+    // Asigna otros campos que pueden haber cambiado
     em.assign(tatuador, req.body);
+    
+    // Guarda los cambios
     await em.flush();
-    res.status(200).json({message: 'tatuador updated succesfully'})
+
+    res.status(200).json({ message: 'Datos actualizados correctamente', data: tatuador });
+
   } catch (error: any) {
-    res.status(500).json({ message: error.message})
+    res.status(500).json({ message: error.message });
   }
-};
+}
+
+
+
 
 async function remove(req: Request, res: Response) {
   try {

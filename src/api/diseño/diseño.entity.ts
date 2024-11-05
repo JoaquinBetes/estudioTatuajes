@@ -5,8 +5,8 @@ import { Turno } from "../turno/turno.entity.js";
 
 @Entity()
 export class Diseño {
-  @PrimaryKey( {type: 'int', autoincrement: true } )
-  id?: number
+  @PrimaryKey({ type: 'int', autoincrement: true })
+  id?: number;
 
   @ManyToOne(() => Categoria)
   categoria!: Rel<Categoria>;
@@ -20,8 +20,8 @@ export class Diseño {
   @Property({ type: 'int' })
   tamañoAproximado!: number;
 
-  @Property({ type: 'string', length: 400 }) // varchar(400)
-  imagen!: string;
+  @Property({ type: 'MEDIUMBLOB' }) // Define el campo de tipo MEDIUMBLOB para imágenes
+  imagen!: Buffer; // Cambia el tipo de datos a Buffer para manejar binarios
 
   @Property({ type: 'float' })
   precioBase!: number;
@@ -34,5 +34,4 @@ export class Diseño {
 
   @Property({ type: 'string', length: 300 }) // varchar(300)
   colores!: string;
-
 }

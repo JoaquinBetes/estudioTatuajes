@@ -18,11 +18,15 @@ Content-Type: application/json
 }
 
 ### Update
-PUT http://localhost:3000/api/tatuador/39999999
+PUT http://localhost:3000/api/tatuador/39453701
 Content-Type: application/json
 
 {
-    "contraseña": "Genius123"
+    "dni": 39453700,
+    "nombreCompleto": "AAA",
+    "email": "betesjoaquin@gmail.com",
+    "telefono": "03413041923",
+    "redesSociales": "-"
 }
 
 ### Delete

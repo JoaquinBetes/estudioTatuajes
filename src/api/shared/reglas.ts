@@ -2,6 +2,12 @@ import { orm } from './db/orm.js'
 
 const em =orm.em
 
+// Verifica si el email cumple con el formato correcto
+export function isValidEmailFormat(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 export async function controlPK(clase: any, pk: number): Promise<boolean> {
     // Busca un registro por clave primaria
     const result = await em.findOne(clase, pk);
@@ -15,13 +21,15 @@ export async function controlEmail(clase: any, email: string): Promise<boolean> 
 
 export async function controlTelyPass(clase: any, telefono: string): Promise<boolean> {
     // Verifica la longitud del teléfono
-    if (telefono.length < 7 || telefono.length > 20) {
-        return false;
+    return !( telefono.length < 7 || telefono.length > 20 )
     }
-    else return true;
+
+export async function controlRedes(redes: string): Promise<boolean> {
+    // Verifica la longitud del teléfono)
+    return ( redes.length < 400 )
     }
+
 export async function controlDni(clase: any, dni: string): Promise<boolean> {
-    // Verifica la longitud del teléfono
     if (dni.length > 8) {
         return false;
     }
