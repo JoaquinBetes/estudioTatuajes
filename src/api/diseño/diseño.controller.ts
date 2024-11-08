@@ -3,6 +3,7 @@ import { orm } from '../shared/db/orm.js'
 import { Diseño } from './diseño.entity.js'
 import { Tatuador } from '../tatuador/tatuador.entity.js'
 import { Categoria } from '../categoria/categoria.entity.js'
+import { controlEstado } from '../shared/reglas.js'
 
 
 const em = orm.em
@@ -15,6 +16,66 @@ async function findAll(req: Request, res: Response) {
     res.status(200).json({ message: 'Find all diseños succesfully' , data: diseños })
   } catch (error: any) {
     res.status(500).json({ message: error.message})
+  }
+}
+
+async function findAllByIdTattoer(req: Request, res: Response) {
+  try {
+    console.log(req.body)
+    const diseños = await em.find(Diseño, { tatuador: {'dni': req.params }}, {
+      populate: ['tatuador', 'categoria']
+    })
+    res.status(200).json({ message: 'Find all diseños succesfully' , data: diseños })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message})
+  }
+}
+
+async function findAllByIdTattoerAndCategory(req: Request, res: Response) {
+  try {
+    // Obtener los parámetros de la URL
+    const { dni, codigo } = req.params;
+    // Convertir 'dni' a número
+    const dniNumber = parseInt(dni, 10);
+    const codigoNumber = parseInt(codigo, 10);
+
+    if (isNaN(dniNumber) || isNaN(codigoNumber)) {
+      return res.status(400).json({ message: "DNI o codigo no son válidos" });
+    }
+
+    // Realizar la búsqueda de los diseños filtrados por tatuador y categoría
+    const diseños = await em.find(Diseño, 
+      {
+        // Filtra por tatuador y categoría usando el dni y el id convertidos a números
+        tatuador: { dni: dniNumber },  // Convertido a número
+        categoria: { codigo: codigoNumber }    // Convertido a número
+      },
+      {
+        populate: ['tatuador', 'categoria']
+      }
+    );
+    // Responder con los datos encontrados
+    res.status(200).json({
+      message: 'Find all diseños successfully',
+      data: diseños
+    });
+  } catch (error: any) {
+    // Manejo de errores
+    res.status(500).json({
+      message: error.message
+    });
+  }
+}
+
+
+async function findAllAvailableDesigns(req: Request, res: Response) {
+  try {
+    const diseños = await em.find(Diseño, { estado: req.params.estado }, {
+      populate: ['tatuador', 'categoria']
+    });
+    res.status(200).json({ message: 'Find all available diseños successfully', data: diseños });
+  } catch (error: any) {
+    res.status(500).json({ asd: "error.message" });
   }
 }
 
@@ -36,7 +97,6 @@ async function findOne(req: Request, res: Response){
 async function add(req: Request, res: Response) {
   const em = orm.em.fork();
   try {
-        console.log(req.body)
       const tatuador = await em.findOne(Tatuador, { dni: req.body.tatuador_dni });
       if (!tatuador) {
           return res.status(404).json({ message: 'Tatuador not found' });
@@ -45,6 +105,10 @@ async function add(req: Request, res: Response) {
       const categoria = await em.findOne(Categoria, { codigo: req.body.categoria_codigo });
       if (!categoria) {
           return res.status(404).json({ message: 'Categoria not found' });
+      }
+
+      if(!controlEstado(req.body.estado)){
+        res.status(500).json({ message: "El Estado ingresado no es válido"})
       }
 
       // Verificar si req.file existe antes de acceder a filename
@@ -82,9 +146,12 @@ async function update(req: Request, res: Response) {
     if (!diseño) {
       return res.status(404).json({ message: 'diseño not found' });
     }
+    if(!controlEstado(req.body.estado)){
+      res.status(500).json({ message: "El Estado ingresado no es válido"})
+    }
     em.assign(diseño, req.body);
     await em.flush();
-    res.status(200).json({message: 'diseños updated succesfully'})
+    res.status(200).json({message: 'Diseño Agregado exitosamente'})
   } catch (error: any) {
     res.status(500).json({ message: error.message})
   }
@@ -99,7 +166,7 @@ async function remove(req: Request, res: Response) {
       return res.status(404).json({ message: 'diseño not found' });
     }
     await em.removeAndFlush(diseño)
-    res.status(200).json({message: 'diseño removed succesfully'})
+    res.status(200).json({message: 'Diseño borrado exitosamente'})
   } catch (error: any) {
     res.status(500).json({ message: error.message})
   } 
@@ -107,4 +174,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export { findAll, findOne, add, update, remove}
+export { findAll, findOne, add, update, remove, findAllByIdTattoer, findAllAvailableDesigns, findAllByIdTattoerAndCategory}

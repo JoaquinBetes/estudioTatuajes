@@ -10,7 +10,7 @@ POST http://localhost:3000/api/sucursal
 Content-Type: application/json
 
 {
-    "pais": "RUSIA",
+    "pais": "Argentina",
     "localidad": "Rosario",
     "direccion": "Juan Manuel de Rosas 1845",
     "departamento": "C",

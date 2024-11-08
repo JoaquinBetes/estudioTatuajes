@@ -28,6 +28,7 @@ async function findOne(req: Request, res: Response){
 }
 
 async function add(req: Request, res: Response) {
+  console.log(req.body)
   try {
       const categoria = em.create(Categoria, req.body)
       await em.flush()

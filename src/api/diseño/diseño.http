@@ -1,6 +1,15 @@
 ### Get all
 GET http://localhost:3000/api/disenio
 
+### Get all by tattoer
+GET http://localhost:3000/api/disenio/tatuador/39453700
+
+### Get all by tattoer
+GET http://localhost:3000/api/disenio/cliente/39453700/1
+
+### Get all available
+GET http://localhost:3000/api/disenio/cliente/tat
+
 ### Get one
 GET http://localhost:3000/api/disenio/1
 
@@ -32,4 +41,4 @@ Content-Type: application/json
 
 
 ### Delete
-DELETE http://localhost:3000/api/disenio/8
+DELETE http://localhost:3000/api/disenio/4

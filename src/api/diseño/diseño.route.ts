@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove } from "./diseño.controller.js";
+import { findAll, findOne, add, update, remove, findAllByIdTattoer, findAllAvailableDesigns , findAllByIdTattoerAndCategory} from "./diseño.controller.js";
 import path from "path";
 import Upload from "../../multer.config.js"; // Multer config
 
@@ -25,3 +25,7 @@ diseñoRouter.get("/", findAll);
 diseñoRouter.get("/:id", findOne);
 diseñoRouter.put("/:id", update);
 diseñoRouter.delete("/:id", remove);
+diseñoRouter.get("/tatuador/:dni", findAllByIdTattoer);
+diseñoRouter.get("/cliente/:estado",findAllAvailableDesigns);
+diseñoRouter.get("/cliente/:dni/:codigo",findAllByIdTattoerAndCategory);
+

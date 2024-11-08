@@ -80,3 +80,7 @@ export function controlEntero(data: any): boolean {
       return false; // En caso de error, retornamos false
     }
   }
+
+  export function controlEstado( data: string): boolean {
+    return (data === "dis" || data === "res" || data === "tat" )
+}

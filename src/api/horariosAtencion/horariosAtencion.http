@@ -13,7 +13,7 @@ Content-Type: application/json
   "sucursal_id": 1,
   "hora_apertura": 4.30,
   "hora_cierre": 10.0,
-  "dia_seamana": "Domingo"
+  "dia_seamana": "Sabado"
 }
 
 ### Update

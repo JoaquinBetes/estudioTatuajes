@@ -17,6 +17,7 @@ import { orm, syncSchema } from './api/shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 
 const app = express();
+app.use(express.json());
 
 // Obtener el directorio actual usando import.meta.url
 const __filename = fileURLToPath(import.meta.url);
