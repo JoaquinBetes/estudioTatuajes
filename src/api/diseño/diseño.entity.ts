@@ -18,10 +18,10 @@ export class Diseño {
   turno?: Rel<Turno>; // Hacer opcional el turno
 
   @Property({ type: 'int' })
-  tamañoAproximado!: number;
+  tamanioAproximado?: number;
 
-  @Property({ type: 'MEDIUMBLOB' }) // Define el campo de tipo MEDIUMBLOB para imágenes
-  imagen!: Buffer; // Cambia el tipo de datos a Buffer para manejar binarios
+  @Property({ type: 'string', length: 300 }) 
+  imagen!: string; 
 
   @Property({ type: 'float' })
   precioBase!: number;
@@ -34,4 +34,7 @@ export class Diseño {
 
   @Property({ type: 'string', length: 300 }) // varchar(300)
   colores!: string;
+
+  @Property({ type: 'string', length: 3 }) // varchar(300)
+  estado!: string;
 }

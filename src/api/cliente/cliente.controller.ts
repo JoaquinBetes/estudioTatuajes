@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express'
 import { orm } from '../shared/db/orm.js'
 import { Cliente } from './cliente.entity.js'
-import { controlPK, controlEmail, controlTelyPass, controlDni } from '../shared/reglas.js'
+import { controlPK, controlEmail, controlTelyPass, controlDni, isValidEmailFormat } from '../shared/reglas.js'
 
 const em = orm.em
 
@@ -37,6 +37,11 @@ async function add(req: Request, res: Response) {
     const dniDisponible = await controlPK(Cliente, req.body.dni);
     if (!dniDisponible) {
       return res.status(409).json({ message: 'El cliente ya está registrado con este DNI' });
+    }
+    // verifica que sea valido el email
+    const emailValido = isValidEmailFormat(req.body.email);
+    if (!emailValido) {
+      return res.status(409).json({ message: 'El email Ingresado no es valido' });
     }
     // Verifica si el email ya está registrado
     const emailDisponible = await controlEmail(Cliente, req.body.email);

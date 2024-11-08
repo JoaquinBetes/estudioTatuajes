@@ -10,11 +10,12 @@ POST http://localhost:3000/api/tatuador
 Content-Type: application/json
 
 {
-    "dni": 99999999,
-    "nombreCompleto": "AAA",
+    "dni": 39453700,
+    "nombreCompleto": "Joaquin Betes",
     "email": "betesjoaquin@gmail.com",
     "telefono": "03413041923",
-    "redesSociales": "-"
+    "redesSociales": "-",
+    "contraseña": "Genius123"
 }
 
 ### Update
@@ -23,11 +24,12 @@ Content-Type: application/json
 
 {
     "dni": 39453700,
-    "nombreCompleto": "AAA",
+    "nombreCompleto": "Joaquin Betes",
     "email": "betesjoaquin@gmail.com",
     "telefono": "03413041923",
-    "redesSociales": "-"
+    "redesSociales": "-",
+    "contraseña": "Genius123"
 }
 
 ### Delete
-DELETE  http://localhost:3000/api/tatuador/39453777
+DELETE  http://localhost:3000/api/tatuador/39453711

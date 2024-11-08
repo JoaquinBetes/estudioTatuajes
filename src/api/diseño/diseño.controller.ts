@@ -4,6 +4,7 @@ import { Diseño } from './diseño.entity.js'
 import { Tatuador } from '../tatuador/tatuador.entity.js'
 import { Categoria } from '../categoria/categoria.entity.js'
 
+
 const em = orm.em
 
 async function findAll(req: Request, res: Response) {
@@ -33,31 +34,46 @@ async function findOne(req: Request, res: Response){
 }
 
 async function add(req: Request, res: Response) {
-    try {
-        const tatuador = await em.findOne(Tatuador, { dni: req.body.tatuador_dni });
-        if (!tatuador) {
-            return res.status(404).json({ message: 'Tatuador not found' });
-        }
-        const categoria = await em.findOne(Categoria, { codigo: req.body.codigo });
-        if (!categoria) {
-            return res.status(404).json({ message: 'Categoria not found' });
-        }
-        const diseño = em.create(Diseño, {
-            categoria: categoria,
-            tatuador: tatuador,
-            tamañoAproximado: req.body.tamaño_aproximado,
-            imagen: req.body.imagen,
-            precioBase: req.body.precio_base,
-            descuento: req.body.descuento,
-            precioFinal: req.body.precio_final,
-            colores: req.body.colores
-        });
-        await em.flush()
-        res.status(201).json({ message: 'diseño added succesfully' , data: diseño })
-    } catch (error: any) {
-    res.status(500).json({ message: error.message})
-    }
+  const em = orm.em.fork();
+  try {
+        console.log(req.body)
+      const tatuador = await em.findOne(Tatuador, { dni: req.body.tatuador_dni });
+      if (!tatuador) {
+          return res.status(404).json({ message: 'Tatuador not found' });
+      }
+
+      const categoria = await em.findOne(Categoria, { codigo: req.body.categoria_codigo });
+      if (!categoria) {
+          return res.status(404).json({ message: 'Categoria not found' });
+      }
+
+      // Verificar si req.file existe antes de acceder a filename
+      if (!req.file) {
+          return res.status(400).json({ message: 'Image file is required' });
+      }
+
+      // Obtener la ruta de la imagen
+      const imagenPath = `/uploads/${req.file.filename}`;
+
+      const diseño = em.create(Diseño, {
+          categoria,
+          tatuador,
+          tamanioAproximado: req.body.tamanio_aproximado,
+          imagen: imagenPath, // Guardar solo la ruta
+          precioBase: req.body.precio_base,
+          descuento: req.body.descuento,
+          precioFinal: req.body.precio_final,
+          colores: req.body.colores,
+          estado: req.body.estado
+      });
+
+      await em.flush();
+      res.status(201).json({ message: 'Diseño added successfully', data: diseño });
+  } catch (error: any) {
+      res.status(500).json({ message: error.message });
+  }
 }
+
 
 async function update(req: Request, res: Response) {
   try {
@@ -88,6 +104,7 @@ async function remove(req: Request, res: Response) {
     res.status(500).json({ message: error.message})
   } 
 };
+
 
 
 export { findAll, findOne, add, update, remove}

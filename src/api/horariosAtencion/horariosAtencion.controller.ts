@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express'
 import { orm } from '../shared/db/orm.js'
 import { HorariosAtencion } from './horariosAtencion.entity.js'
 import { Sucursal } from '../sucursal/sucursal.entity.js'
+import { validarHora } from '../shared/reglas.js'
 
 const em = orm.em
 
@@ -58,9 +59,15 @@ async function update(req: Request, res: Response) {
     if (!horariosAtencion) {
       return res.status(404).json({ message: 'horariosAtencion not found' });
     }
+    if (!validarHora(req.body.horaApertura)) {
+      return res.status(409).json({ message: 'El horario ingresado no es válido' });
+    }
+    if (!validarHora(req.body.horaCierre)) {
+      return res.status(409).json({ message: 'El horario ingresado no es válido' });
+    }
     em.assign(horariosAtencion, req.body);
     await em.flush();
-    res.status(200).json({message: 'horariosAtencions updated succesfully'})
+    res.status(200).json({message: 'horarios de atencion actualizados exitosamente'})
   } catch (error: any) {
     res.status(500).json({ message: error.message})
   }
