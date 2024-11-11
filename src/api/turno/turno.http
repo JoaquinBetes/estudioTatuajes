@@ -11,17 +11,18 @@ POST http://localhost:3000/api/turno
 Content-Type: application/json
 
 {
-"hora_inicio": "2024-07-16 09:00:00", 
-"hora_fin": "2024-07-16 11:00:00",
+"hora_inicio": "16:00:00", 
+"hora_fin": "17:00:00",
 "fecha_turno": "2024-07-16 00:00:00",
 "tatuador_dni": 39453700,
-"cliente_dni": 39453711,
-"diseño_id": 1,
+"cliente_dni": 39453700,
+"diseño_id": 5,
+"indicaciones":"ta bissen",
 "estado": "pen"
 }
 
 ### Update
-PUT http://localhost:3000/api/turno/2024-10-16T09%3A00%3A00.000Z/2024-10-16T11%3A00%3A00.000Z/2024-10-16T00%3A00%3A00.000Z
+PUT http://localhost:3000/api/turno/09%3A00%3A00.000Z/2024-10-16T11%3A00%3A00.000Z/2024-10-16T00%3A00%3A00.000Z
 Content-Type: application/json
 
 {
@@ -29,4 +30,4 @@ Content-Type: application/json
 }
 
 ### Delete
-DELETE  http://localhost:3000/api/turno/2024-10-16T09%3A00%3A00.000Z/2024-10-16T11%3A00%3A00.000Z/2024-10-16T00%3A00%3A00.000Z
+DELETE  http://localhost:3000/api/turno/2024-10-16T16%3A00%3A00/2024-10-16T17%3A00%3A00.000Z/2024-07-16T00%3A00%3A00.000Z

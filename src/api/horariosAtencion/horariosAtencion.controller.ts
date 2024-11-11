@@ -3,13 +3,14 @@ import { orm } from '../shared/db/orm.js'
 import { HorariosAtencion } from './horariosAtencion.entity.js'
 import { Sucursal } from '../sucursal/sucursal.entity.js'
 import { validarHora } from '../shared/reglas.js'
+import moment from 'moment';
 
 const em = orm.em
 
 async function findAll(req: Request, res: Response) {
   try {
-    const horariosAtenciones = await em.find(HorariosAtencion, {}, {
-      populate:['sucursal']
+    const horariosAtenciones = await em.find(HorariosAtencion,{}, {
+      populate: ['sucursal']
     })
     res.status(200).json({ message: 'Find all horariosAtenciones succesfully' , data: horariosAtenciones })
   } catch (error: any) {
@@ -38,12 +39,17 @@ async function add(req: Request, res: Response) {
       if (!sucursal) {
         return res.status(404).json({ message: 'sucursal not found' });
       }
+
+      // Validar y convertir horaApertura y horaCierre usando moment.js
+      const horaApertura = moment(req.body.hora_apertura, 'HH:mm:ss').format('HH:mm:ss');
+      const horaCierre = moment(req.body.hora_cierre, 'HH:mm:ss').format('HH:mm:ss');
+
       const horariosAtencion = em.create(HorariosAtencion, 
         {
         sucursal: sucursal, // Asigna el tatuador encontrado
-        horaApertura: req.body.hora_apertura,
-        horaCierre: req.body.hora_cierre,
-        diaSeamana: req.body.dia_seamana
+        hora_apertura: horaApertura,
+        hora_cierre: horaCierre,
+        dia_semana: req.body.dia_semana
       });
       await em.flush()
       res.status(201).json({ message: 'horariosAtencion added succesfully' , data: horariosAtencion })
@@ -59,10 +65,7 @@ async function update(req: Request, res: Response) {
     if (!horariosAtencion) {
       return res.status(404).json({ message: 'horariosAtencion not found' });
     }
-    if (!validarHora(req.body.horaApertura)) {
-      return res.status(409).json({ message: 'El horario ingresado no es válido' });
-    }
-    if (!validarHora(req.body.horaCierre)) {
+    if (req.body.hora_apertura > req.body.hora_cierre) {
       return res.status(409).json({ message: 'El horario ingresado no es válido' });
     }
     em.assign(horariosAtencion, req.body);

@@ -10,13 +10,13 @@ export class HorariosAtencion {
   @ManyToOne ( () => Sucursal )
   sucursal!: Rel<Sucursal>;
 
-  @Property ({ type: 'float'})
-  horaApertura!: number;
+  @Property({ type: 'time' }) // Guardar solo la hora
+  hora_apertura!: string; // Solo la hora de inicio
 
-  @Property ({ type: 'float'})
-  horaCierre!: number;
+  @Property({ type: 'time' }) // Guardar solo la hora
+  hora_cierre!: string; // Solo la hora de cierre
 
   @Property({ type: 'string', length: 30 }) // varchar(30)
-  diaSeamana!: string;
+  dia_semana!: string;
 
 }

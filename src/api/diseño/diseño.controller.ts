@@ -48,7 +48,8 @@ async function findAllByIdTattoerAndCategory(req: Request, res: Response) {
       {
         // Filtra por tatuador y categoría usando el dni y el id convertidos a números
         tatuador: { dni: dniNumber },  // Convertido a número
-        categoria: { codigo: codigoNumber }    // Convertido a número
+        categoria: { codigo: codigoNumber },    // Convertido a número
+        estado: req.params.estado
       },
       {
         populate: ['tatuador', 'categoria']

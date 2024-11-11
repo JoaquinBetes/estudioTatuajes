@@ -27,5 +27,5 @@ diseñoRouter.put("/:id", update);
 diseñoRouter.delete("/:id", remove);
 diseñoRouter.get("/tatuador/:dni", findAllByIdTattoer);
 diseñoRouter.get("/cliente/:estado",findAllAvailableDesigns);
-diseñoRouter.get("/cliente/:dni/:codigo",findAllByIdTattoerAndCategory);
+diseñoRouter.get("/cliente/:dni/:codigo/:estado",findAllByIdTattoerAndCategory);
 

@@ -5,25 +5,30 @@ import { Cliente } from "../cliente/cliente.entity.js";
 
 @Entity()
 export class Turno {
-  @PrimaryKey() // Debe ser un datetime
-  horaInicio!: Date;
+  @PrimaryKey({type: 'int', autoincrement: true }) // Debe ser un datetime
+  id!: number; // Aquí sigue siendo Date, ya que la fecha es importante
 
-  @PrimaryKey()
-  horaFin!: Date;
+  @Property({ type: 'date' }) // Debe ser un datetime
+  fechaTurno!: Date; // Aquí sigue siendo Date, ya que la fecha es importante
 
-  @PrimaryKey()
-  fechaTurno!: Date;
+  @Property({ type: 'time' }) // Guardar solo la hora
+  horaInicio!: string; // Solo la hora de inicio
+
+  @Property({ type: 'time' }) // Guardar solo la hora
+  horaFin!: string; // Solo la hora de fin
 
   @ManyToOne(() => Tatuador) // Relación con Tatuador
-  tatuador!: Rel<Tatuador>; // Tatuador asociado al turno TODO DEBERIA SER PRIMARY KEY
+  tatuador!: Rel<Tatuador>; // Tatuador asociado al turno TODO DEBERÍA SER PRIMARY KEY
 
-  @ManyToOne ( () => Cliente )
+  @ManyToOne(() => Cliente)
   cliente!: Cliente;
 
   @OneToOne(() => Diseño, { owner: true }) 
   diseño?: Rel<Diseño>; // Hacer opcional
 
-  @Property( { type: 'string', length: 3 } )
-  estado!: string;
+  @Property({ type: 'string', length: 400 })
+  indicaciones!: string;
 
+  @Property({ type: 'string', length: 3 })
+  estado!: string;
 }
