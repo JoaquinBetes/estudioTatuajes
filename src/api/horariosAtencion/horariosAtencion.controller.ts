@@ -9,9 +9,7 @@ const em = orm.em
 
 async function findAll(req: Request, res: Response) {
   try {
-    const horariosAtenciones = await em.find(HorariosAtencion,{}, {
-      populate: ['sucursal']
-    })
+    const horariosAtenciones = await em.find(HorariosAtencion,{})
     res.status(200).json({ message: 'Find all horariosAtenciones succesfully' , data: horariosAtenciones })
   } catch (error: any) {
     res.status(500).json({ message: error.message})

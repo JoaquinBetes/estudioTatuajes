@@ -10,11 +10,12 @@ POST http://localhost:3000/api/cliente
 Content-Type: application/json
 
 {
-    "dni": 399453711,
-    "nombreCompleto": "FALOPA",
+    "dni": 39453999,
+    "nombreCompleto": "Martin Rodriguez",
     "email": "vetesjoaquin@gmail.com",
     "telefono": "03413041923",
-    "estado": 1
+    "estado": 3,
+    "contraseña":"genius123"
 }
 
 ### Update

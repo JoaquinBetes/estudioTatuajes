@@ -84,3 +84,7 @@ export function controlEntero(data: any): boolean {
   export function controlEstado( data: string): boolean {
     return (data === "dis" || data === "res" || data === "tat" )
 }
+
+  export function clienteEstado( data: number ): boolean{
+    return (data < 3)
+  }

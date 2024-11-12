@@ -4,7 +4,7 @@ GET http://localhost:3000/api/disenio
 ### Get all by tattoer
 GET http://localhost:3000/api/disenio/tatuador/39453700
 
-### Get all by tattoer
+### Get all by cliente
 GET http://localhost:3000/api/disenio/cliente/39453700/1
 
 ### Get all available

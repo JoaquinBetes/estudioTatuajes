@@ -5,6 +5,7 @@ import { Tatuador } from '../tatuador/tatuador.entity.js'
 import { Cliente } from '../cliente/cliente.entity.js'
 import { Turno } from './turno.entity.js'
 import moment from 'moment';
+import { clienteEstado } from '../shared/reglas.js'
 
 const em = orm.em
 
@@ -40,7 +41,7 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
-  try {
+  try {    
       const tatuador = await em.findOne(Tatuador, { dni: req.body.tatuador_dni });
       if (!tatuador) {
           return res.status(404).json({ message: 'Tatuador not found' });
@@ -49,6 +50,12 @@ async function add(req: Request, res: Response) {
       if (!cliente) {
           return res.status(404).json({ message: 'cliente not found' });
       }
+
+      if(!clienteEstado(cliente.estado)){
+        return res.status(500).json({ message: 'El cliente posee un estado de deudor, regularice su situación antes de continuar' });
+      }
+
+
       const diseño = await em.findOne(Diseño, { id: req.body.diseño_id });
       if (!diseño) {
           return res.status(404).json({ message: 'diseño not found' });
@@ -56,6 +63,9 @@ async function add(req: Request, res: Response) {
       diseño.estado = "res";
       // Validar y convertir horaInicio y horaFin usando moment.js
       const horaInicio = moment(req.body.hora_inicio, 'HH:mm:ss').format('HH:mm:ss');
+      if ( horaInicio === 'Invalid date' ){
+        return res.status(500).json({ message: 'Ingrese una hora válida' });
+      }
       const horaFin = moment(req.body.hora_fin, 'HH:mm:ss').format('HH:mm:ss');
       const fechaTurno = moment(req.body.fecha_turno).format('YYYY-MM-DD');
 
@@ -128,5 +138,44 @@ async function remove(req: Request, res: Response) {
   } 
 };
 
+async function findByTatuadorAndDate(req: Request, res: Response) {
+  try {
+    const tatuadorDni = req.params.tatuador_dni; // DNI o ID del tatuador
+    // Buscar el tatuador por DNI
+    const tatuador = await em.findOne(Tatuador, { dni: Number.parseInt(tatuadorDni) });
+    if (!tatuador) {
+      return res.status(404).json({ message: 'Tatuador no encontrado' });
+    }
+    // Consultar todos los turnos en la fecha especificada para el tatuador encontrado
+    const turnos = await em.find(Turno, {
+      tatuador: tatuador,
+      fechaTurno: req.params.fecha_turno
+    });
+    res.status(200).json({ message: 'Turnos found successfully', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
-export { findAll, findOne, add, update, remove}
+async function findByCliente(req: Request, res: Response) {
+  try {
+    const clienteDni = req.params.cliente_dni; // DNI del cliente
+    // Buscar al cliente por DNI
+    const cliente = await em.findOne(Cliente, { dni: Number.parseInt(clienteDni) });
+    if (!cliente) {
+      return res.status(404).json({ message: 'Cliente no encontrado' });
+    }
+    // Consultar todos los turnos asociados al cliente encontrado
+    const turnos = await em.find(Turno, {
+      cliente: cliente
+    }, {
+      populate: ['tatuador', 'diseño'] // Popula relaciones si es necesario
+    });
+    res.status(200).json({ message: 'Turnos found successfully', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente}

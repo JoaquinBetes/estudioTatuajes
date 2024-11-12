@@ -4,6 +4,11 @@ GET http://localhost:3000/api/turno
 ### Get one
 GET http://localhost:3000/api/turno/2024-10-16T09%3A00%3A00.000Z/2024-10-16T11%3A00%3A00.000Z/2024-10-16T00%3A00%3A00.000Z
 
+### Get by tatuador and fecha
+GET http://localhost:3000/api/turno/tatuador/39453700/fecha/2024-11-11
+
+### Get by cliente
+GET http://localhost:3000/api/turno/cliente/39453700
 
 ### Post
 # @name createTurno
@@ -22,11 +27,11 @@ Content-Type: application/json
 }
 
 ### Update
-PUT http://localhost:3000/api/turno/09%3A00%3A00.000Z/2024-10-16T11%3A00%3A00.000Z/2024-10-16T00%3A00%3A00.000Z
+PUT http://localhost:3000/api/turno/3
 Content-Type: application/json
 
 {
-    "estado": "dis"
+    "estado": "pen"
 }
 
 ### Delete
