@@ -10,7 +10,7 @@ POST http://localhost:3000/api/politicas
 Content-Type: application/json
 
 {
-    "precio_base_minimo": 8000.0,
+    "precio_base_minimo": 4000.0,
     "descuento_maximo": 0.50,
     "comisiones_estudio": 0.40
 }

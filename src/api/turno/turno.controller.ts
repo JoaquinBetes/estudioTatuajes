@@ -169,7 +169,26 @@ async function findByCliente(req: Request, res: Response) {
     const turnos = await em.find(Turno, {
       cliente: cliente
     }, {
-      populate: ['tatuador', 'diseño'] // Popula relaciones si es necesario
+      populate: ['tatuador', 'diseño', 'cliente'] // Popula relaciones si es necesario
+    });
+    res.status(200).json({ message: 'Turnos found successfully', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+async function findByTatuador(req: Request, res: Response) {
+  try {
+    const tatuadorDni = req.params.tatuador_dni; // DNI del tatuador
+    // Buscar al tatuador por DNI
+    const tatuador = await em.findOne(Tatuador, { dni: Number.parseInt(tatuadorDni) });
+    if (!tatuador) {
+      return res.status(404).json({ message: 'Tatuador no encontrado' });
+    }
+    // Consultar todos los turnos asociados al tatuador encontrado
+    const turnos = await em.find(Turno, {
+      tatuador: tatuador
+    }, {
+      populate: ['cliente', 'diseño', 'tatuador'] // Popula relaciones si es necesario
     });
     res.status(200).json({ message: 'Turnos found successfully', data: turnos });
   } catch (error: any) {
@@ -178,4 +197,5 @@ async function findByCliente(req: Request, res: Response) {
 }
 
 
-export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente}
+
+export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador}

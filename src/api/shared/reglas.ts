@@ -88,3 +88,7 @@ export function controlEntero(data: any): boolean {
   export function clienteEstado( data: number ): boolean{
     return (data < 3)
   }
+  export function esNumero(valor: any): boolean {
+    return Number.isFinite(valor);
+  }
+  

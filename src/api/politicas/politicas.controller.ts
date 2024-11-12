@@ -1,6 +1,7 @@
 import {Request, Response, NextFunction} from 'express'
 import { orm } from '../shared/db/orm.js'
 import { Politicas } from './politicas.entity.js'
+import { esNumero } from '../shared/reglas.js'
 
 const em = orm.em
 
@@ -47,9 +48,14 @@ async function update(req: Request, res: Response) {
     if (!politica) {
       return res.status(404).json({ message: 'Politica not found' });
     }
-    em.assign(politica, req.body);
-    await em.flush();
-    res.status(200).json({message: 'politicas updated succesfully'})
+    console.log(req.body)
+    if (esNumero(req.body.precioBaseMinimo) && esNumero(req.body.descuentoMaximo) && esNumero(req.body.comisionesEstudio)){
+      em.assign(politica, req.body);
+      await em.flush();
+      res.status(200).json({message: 'Políticas actualizadas'})
+    }
+    else{ res.status(500).json({ message: "Alguno de los valores ingresados no es un numero"}) }
+
   } catch (error: any) {
     res.status(500).json({ message: error.message})
   }

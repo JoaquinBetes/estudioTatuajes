@@ -32,11 +32,11 @@ Content-Type: application/json
 }
 
 ### Update
-PUT http://localhost:3000/api/disenio/1
+PUT http://localhost:3000/api/disenio/8
 Content-Type: application/json
 
 {
-    "colores": "amarillo, negro, azul"
+    "estado": "dis"
 }
 
 

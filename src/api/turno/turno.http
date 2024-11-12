@@ -35,4 +35,4 @@ Content-Type: application/json
 }
 
 ### Delete
-DELETE  http://localhost:3000/api/turno/2024-10-16T16%3A00%3A00/2024-10-16T17%3A00%3A00.000Z/2024-07-16T00%3A00%3A00.000Z
+DELETE  http://localhost:3000/api/turno/4
