@@ -11,7 +11,7 @@ GET http://localhost:3000/api/disenio/cliente/39453700/1
 GET http://localhost:3000/api/disenio/cliente/tat
 
 ### Get one
-GET http://localhost:3000/api/disenio/1
+GET http://localhost:3000/api/disenio/2
 
 ### Post
 # @name createdisenio
@@ -32,7 +32,7 @@ Content-Type: application/json
 }
 
 ### Update
-PUT http://localhost:3000/api/disenio/8
+PUT http://localhost:3000/api/disenio/10
 Content-Type: application/json
 
 {

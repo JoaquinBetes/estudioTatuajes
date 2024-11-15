@@ -196,6 +196,37 @@ async function findByTatuador(req: Request, res: Response) {
   }
 }
 
+async function findTurnosByTatuadorForCurrentMonth(req: Request, res: Response) {
+  try {
+    const tatuadorDni = req.params.tatuador_dni; // Obtener DNI del tatuador desde los parámetros
+    // Buscar al tatuador por DNI
+    const tatuador = await em.findOne(Tatuador, { dni: Number.parseInt(tatuadorDni) });
+    if (!tatuador) {
+      return res.status(404).json({ message: 'Tatuador no encontrado' });
+    }
+    // Obtener el inicio y fin del mes actual usando moment.js
+    const startOfMonth = moment().startOf('month').toDate();
+    const endOfMonth = moment().endOf('month').toDate();
+    // Buscar turnos del tatuador en el rango de fechas (mes actual)
+    const turnos = await em.find(
+      Turno,
+      {
+        tatuador: tatuador,
+        fechaTurno: {
+          $gte: startOfMonth, // Fecha de turno mayor o igual al inicio del mes
+          $lte: endOfMonth    // Fecha de turno menor o igual al final del mes
+        }
+      },
+      {
+        populate: ['cliente', 'diseño', 'tatuador'] // Popula relaciones si es necesario
+      }
+    );
+    res.status(200).json({ message: 'Turnos found successfully for the current month', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
-export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador}
+
+export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth}

@@ -84,7 +84,7 @@ async function findOne(req: Request, res: Response){
   try {
     const id = Number.parseInt(req.params.id)
     const diseño = await em.findOne(Diseño, {id}, {
-      populate: ['tatuador', 'categoria']
+      populate: ['tatuador', 'categoria', 'turno']
     })
     if (diseño === null){
       res.status(404).json({ message: 'diseño was not found'})
@@ -141,22 +141,47 @@ async function add(req: Request, res: Response) {
 
 
 async function update(req: Request, res: Response) {
+  const em = orm.em.fork(); // Crear una nueva instancia de EntityManager para este contexto
   try {
-    const id = Number.parseInt(req.params.id)
-    const diseño = await em.findOne(Diseño, {id} )
+    const id = Number.parseInt(req.params.id);
+    const diseño = await em.findOne(Diseño, { id });
+    
     if (!diseño) {
-      return res.status(404).json({ message: 'diseño not found' });
+      return res.status(404).json({ message: 'Diseño no encontrado' });
     }
-    if(!controlEstado(req.body.estado)){
-      res.status(500).json({ message: "El Estado ingresado no es válido"})
+
+    // Validar el estado
+    if (!controlEstado(req.body.estado)) {
+      return res.status(500).json({ message: "El Estado ingresado no es válido" });
     }
-    em.assign(diseño, req.body);
+
+    // Asignar los campos que llegaron en el body al diseño
+    em.assign(diseño, req.body); // Esto asigna todos los campos que vienen en el body
+
+    // Si se ha enviado una nueva imagen, se actualiza
+    if (req.file) {
+      // Si existe un archivo, se actualiza la imagen
+      const imagenPath = `/uploads/${req.file.filename}`;
+      diseño.imagen = imagenPath; // Actualiza la imagen en la entidad
+    }
+
+    // Actualizar el precio final si se ha pasado
+    if (req.body.precio_final) {
+      diseño.precioFinal = parseFloat(req.body.precio_final);
+    }
+
+    // Realizar la persistencia
     await em.flush();
-    res.status(200).json({message: 'Diseño Agregado exitosamente'})
+
+    res.status(200).json({ message: 'Diseño actualizado exitosamente' });
+
   } catch (error: any) {
-    res.status(500).json({ message: error.message})
+    res.status(500).json({ message: error.message });
   }
-};
+}
+
+
+
 
 async function remove(req: Request, res: Response) {
   try {
