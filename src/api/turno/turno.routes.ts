@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {  findAll, findOne, add, update, remove,findByTatuadorAndDate, findByCliente, findByTatuador, findTurnosByTatuadorForCurrentMonth } from "./turno.controller.js";
+import {  findAll, findOne, add, update, remove,findByTatuadorAndDate, findByCliente, findByTatuador, findTurnosByTatuadorForCurrentMonth, findTurnosByTatuadorForLastThreeMonths, findAllTurnosForCurrentMonth} from "./turno.controller.js";
 
 export const turnoRouter = Router();
 
@@ -12,3 +12,6 @@ turnoRouter.get('/tatuador/:tatuador_dni/fecha/:fecha_turno', findByTatuadorAndD
 turnoRouter.get('/cliente/:cliente_dni', findByCliente);
 turnoRouter.get('/tatuador/:tatuador_dni', findByTatuador);
 turnoRouter.get('/tatuador/:tatuador_dni/current-month', findTurnosByTatuadorForCurrentMonth);
+turnoRouter.get('/tatuador/:tatuador_dni/last-three-months', findTurnosByTatuadorForLastThreeMonths);
+turnoRouter.get('/encargado/current-month', findAllTurnosForCurrentMonth);
+

@@ -227,6 +227,73 @@ async function findTurnosByTatuadorForCurrentMonth(req: Request, res: Response) 
   }
 }
 
+async function findAllTurnosForCurrentMonth(req: Request, res: Response) {
+  try {
+    const startOfMonth = moment().startOf('month');
+    const endOfMonth = moment().endOf('month');
+
+    // Validación de fechas
+    if (!startOfMonth.isValid() || !endOfMonth.isValid()) {
+      return res.status(400).json({ message: 'Las fechas generadas no son válidas' });
+    }
+
+    // Buscar todos los turnos en el mes actual
+    const turnos = await em.find(
+      Turno,
+      {
+        fechaTurno: {
+          $gte: startOfMonth.toDate(), // Fecha de turno mayor o igual al inicio del mes
+          $lte: endOfMonth.toDate()    // Fecha de turno menor o igual al final del mes
+        }
+      },
+      {
+        populate: ['tatuador', 'diseño'] // Puedes incluir las relaciones necesarias
+      }
+    );
+
+    res.status(200).json({ message: 'Turnos del mes actual encontrados exitosamente', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
-export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth}
+
+
+
+async function findTurnosByTatuadorForLastThreeMonths(req: Request, res: Response) {
+  try {
+    const tatuadorDni = req.params.tatuador_dni; // Obtener DNI del tatuador desde los parámetros
+    // Buscar al tatuador por DNI
+    const tatuador = await em.findOne(Tatuador, { dni: Number.parseInt(tatuadorDni) });
+    if (!tatuador) {
+      return res.status(404).json({ message: 'Tatuador no encontrado' });
+    }
+    // Obtener el rango de fechas de los últimos 3 meses
+    const threeMonthsAgo = moment().subtract(3, 'months').startOf('month').toDate();
+    const today = moment().endOf('day').toDate();
+    // Buscar turnos del tatuador en el rango de fechas (últimos 3 meses)
+    const turnos = await em.find(
+      Turno,
+      {
+        tatuador: tatuador,
+        fechaTurno: {
+          $gte: threeMonthsAgo, // Fecha de turno mayor o igual al inicio del rango
+          $lte: today           // Fecha de turno menor o igual a hoy
+        }
+      },
+      {
+        populate: ['diseño'] // Popula relaciones si es necesario
+      }
+    );
+    res.status(200).json({ message: 'Turnos found successfully for the last 3 months', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+
+
+
+export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth, findTurnosByTatuadorForLastThreeMonths, findAllTurnosForCurrentMonth}
