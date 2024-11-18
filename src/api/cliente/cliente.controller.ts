@@ -19,7 +19,7 @@ async function findOne(req: Request, res: Response){
     const dni = Number.parseInt(req.params.dni)
     const cliente = await em.findOne(Cliente, {dni})
     if (cliente === null){
-      res.status(404).json({ message: 'cliente was not found'})
+      res.status(404).json({ message: 'El cliente no fue encontrado'})
     }
     res.status(200).json({ message: 'Find cliente succesfully' , data: cliente })
   } catch (error: any) {
@@ -95,6 +95,35 @@ async function remove(req: Request, res: Response) {
     res.status(500).json({ message: error.message})
   } 
 };
+async function findAdmin(req: Request, res: Response) {
+  try {
+    const { dni, email, contraseña } = req.body; // Obtén los datos del cuerpo de la solicitud
+    console.log(req.body)
+    // Validar los datos básicos
+    if (!dni || !email || !contraseña) {
+      return res.status(400).json({ message: 'Faltan datos requeridos: DNI, email o contraseña' });
+    }
+    // Buscar el cliente por DNI y estado -99
+    const admin = await em.findOne(Cliente, { dni, estado: -99 });
+
+    if (!admin) {
+      return res.status(404).json({ message: 'Administrador no encontrado o credenciales inválidas' });
+    }
+    // Verificar que el email coincide
+    if (admin.email !== email) {
+      return res.status(401).json({ message: 'El email ingresado no coincide' });
+    }
+    // Verificar que el email coincide
+    if (admin.contraseña !== contraseña) {
+      return res.status(401).json({ message: 'El contraseña ingresado no coincide' });
+    }
+    // Si todas las validaciones son correctas, retornar el administrador
+    res.status(200).json({ message: 'Administrador encontrado exitosamente', data: admin });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
-export { findAll, findOne, add, update, remove}
+
+export { findAll, findOne, add, update, remove, findAdmin}

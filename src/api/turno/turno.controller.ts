@@ -119,9 +119,7 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
   try {
-
     // Convertir los parámetros a objetos Date
-
     const id = Number.parseInt(req.params.id)
     // Buscar el turno en la base de datos
     const turno = await em.findOne(Turno, {id});
@@ -236,7 +234,6 @@ async function findAllTurnosForCurrentMonth(req: Request, res: Response) {
     if (!startOfMonth.isValid() || !endOfMonth.isValid()) {
       return res.status(400).json({ message: 'Las fechas generadas no son válidas' });
     }
-
     // Buscar todos los turnos en el mes actual
     const turnos = await em.find(
       Turno,
@@ -250,13 +247,46 @@ async function findAllTurnosForCurrentMonth(req: Request, res: Response) {
         populate: ['tatuador', 'diseño'] // Puedes incluir las relaciones necesarias
       }
     );
-
     res.status(200).json({ message: 'Turnos del mes actual encontrados exitosamente', data: turnos });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
 
+async function findAllTurnosForSpecificMonth(req: Request, res: Response) {
+  try {
+    // Obtener el mes desde los parámetros de la solicitud
+    const { mes } = req.params;
+    const mesNumerico = parseInt(mes, 10);
+    // Validar que el mes sea un número válido
+    if (isNaN(mesNumerico) || mesNumerico < 1 || mesNumerico > 12) {
+      return res.status(400).json({ message: 'El mes proporcionado no es válido. Debe estar entre 1 y 12.' });
+    }
+    // Calcular el inicio y el fin del mes especificado en el año actual
+    const startOfMonth = moment().month(mesNumerico - 1).startOf('month'); // Restamos 1 porque Moment utiliza índice 0 para los meses
+    const endOfMonth = moment().month(mesNumerico - 1).endOf('month');
+    // Validación de fechas
+    if (!startOfMonth.isValid() || !endOfMonth.isValid()) {
+      return res.status(400).json({ message: 'Las fechas generadas no son válidas.' });
+    }
+    // Buscar todos los turnos dentro del rango de fechas
+    const turnos = await em.find(
+      Turno,
+      {
+        fechaTurno: {
+          $gte: startOfMonth.toDate(), // Fecha de turno mayor o igual al inicio del mes
+          $lte: endOfMonth.toDate(),  // Fecha de turno menor o igual al final del mes
+        },
+      },
+      {
+        populate: ['tatuador', 'diseño'], // Puedes incluir las relaciones necesarias
+      }
+    );
+    res.status(200).json({ message: 'Turnos del mes especificado encontrados exitosamente', data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
 
@@ -296,4 +326,4 @@ async function findTurnosByTatuadorForLastThreeMonths(req: Request, res: Respons
 
 
 
-export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth, findTurnosByTatuadorForLastThreeMonths, findAllTurnosForCurrentMonth}
+export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth, findTurnosByTatuadorForLastThreeMonths, findAllTurnosForCurrentMonth,findAllTurnosForSpecificMonth}

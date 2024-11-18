@@ -6,8 +6,11 @@ GET http://localhost:3000/api/turno/1
 
 ### Get by tatuador y mes actual
 GET http://localhost:3000/api/turno/tatuador/39453700/current-month
-### Get by tatuador y mes actual
+
+### Get by mes actual
 GET http://localhost:3000/api/turno/encargado/current-month
+### Get by mes seleccionado
+GET http://localhost:3000/api/turno/encargado/month/11
 ### Get by tatuador y ultimos tres meses
 GET http://localhost:3000/api/turno/tatuador/39453700/last-three-months
 
