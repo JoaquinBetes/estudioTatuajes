@@ -1,0 +1,10 @@
+### Post
+# @name createCategoria
+POST http://localhost:3000/api/email/enviar-correo
+Content-Type: application/json
+
+{
+    "email": "vetesjoaquin@gmail.com",
+    "asunto": "Confirmar turno",
+    "mensaje": "Confirmar antes de las 24hs"
+}

@@ -13,6 +13,7 @@ import { turnoRouter } from './api/turno/turno.routes.js';
 import { politicasRouter } from './api/politicas/politicas.routes.js';
 import { sucursalRouter } from './api/sucursal/sucursal.routes.js';
 import { horariosAtencionRouter } from './api/horariosAtencion/horariosAtencion.routes.js'; 
+import { emailRouter } from './api/email/email.routes.js';
 import { orm, syncSchema } from './api/shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 
@@ -47,6 +48,7 @@ app.use("/api/turno", turnoRouter)
 app.use("/api/politicas", politicasRouter)
 app.use("/api/sucursal", sucursalRouter)
 app.use("/api/horariosAtencion", horariosAtencionRouter)
+app.use('/api/email', emailRouter);
 
 
 app.use((_, res) => {
