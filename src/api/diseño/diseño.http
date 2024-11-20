@@ -41,4 +41,4 @@ Content-Type: application/json
 
 
 ### Delete
-DELETE http://localhost:3000/api/disenio/2
+DELETE http://localhost:3000/api/disenio/21

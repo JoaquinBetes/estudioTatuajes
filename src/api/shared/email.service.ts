@@ -17,7 +17,7 @@ export async function enviarCorreo(destinatario: string, asunto: string, mensaje
     to: destinatario,
     subject: asunto,
     text: mensaje,
-    html: `<p>${mensaje}</p>`,
+    html: mensaje,
   };
 
   try {

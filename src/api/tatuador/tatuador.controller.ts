@@ -62,7 +62,7 @@ async function add(req: Request, res: Response) {
   // Si ambos están disponibles, crea el Tatuador
     const tatuador = em.create(Tatuador, req.body)
     await em.flush()
-    res.status(201).json({ message: 'tatuador added succesfully' , data: tatuador })
+    res.status(201).json({ message: 'tatuador agregado exitosamente' , data: tatuador })
   } catch (error: any) {
     res.status(500).json({ message: error.message})
   }

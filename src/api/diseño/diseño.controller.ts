@@ -105,7 +105,7 @@ async function add(req: Request, res: Response) {
 
       const categoria = await em.findOne(Categoria, { codigo: req.body.categoria_codigo });
       if (!categoria) {
-          return res.status(404).json({ message: 'Categoria not found' });
+          return res.status(404).json({ message: 'Categoria no encontrada' });
       }
 
       if(!controlEstado(req.body.estado)){
@@ -114,7 +114,7 @@ async function add(req: Request, res: Response) {
 
       // Verificar si req.file existe antes de acceder a filename
       if (!req.file) {
-          return res.status(400).json({ message: 'Image file is required' });
+          return res.status(400).json({ message: 'Ingrese una imagen' });
       }
 
       // Obtener la ruta de la imagen
@@ -133,7 +133,7 @@ async function add(req: Request, res: Response) {
       });
 
       await em.flush();
-      res.status(201).json({ message: 'Diseño added successfully', data: diseño });
+      res.status(201).json({ message: 'Diseño agregado exitosamente', data: diseño });
   } catch (error: any) {
       res.status(500).json({ message: error.message });
   }

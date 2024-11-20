@@ -322,8 +322,54 @@ async function findTurnosByTatuadorForLastThreeMonths(req: Request, res: Respons
   }
 }
 
+async function findTurnosByTatuadorForSpecificMonth(req: Request, res: Response) {
+  try {
+    const tatuadorDni = req.params.tatuador_dni; // Obtener DNI del tatuador desde los parámetros
+    const mes = parseInt(req.params.mes); // Obtener mes desde los parámetros
+    const anio = parseInt(req.params.anio); // Obtener año desde los parámetros (opcional)
+    
+    if (isNaN(mes) || mes < 1 || mes > 12) {
+      return res.status(400).json({ message: "Mes inválido. Debe estar entre 1 y 12." });
+    }
+    if (anio && isNaN(anio)) {
+      return res.status(400).json({ message: "Año inválido." });
+    }
+
+    // Buscar al tatuador por DNI
+    const tatuador = await em.findOne(Tatuador, { dni: Number.parseInt(tatuadorDni) });
+    if (!tatuador) {
+      return res.status(404).json({ message: 'Tatuador no encontrado' });
+    }
+
+    // Calcular fechas de inicio y fin del mes especificado
+    const year = anio || moment().year(); // Si no se pasa el año, usar el año actual
+    const startOfMonth = moment().year(year).month(mes - 1).startOf('month').toDate();
+    const endOfMonth = moment().year(year).month(mes - 1).endOf('month').toDate();
+
+    // Buscar turnos del tatuador en el rango de fechas del mes especificado
+    const turnos = await em.find(
+      Turno,
+      {
+        tatuador: tatuador,
+        fechaTurno: {
+          $gte: startOfMonth, // Fecha de turno mayor o igual al inicio del mes
+          $lte: endOfMonth    // Fecha de turno menor o igual al final del mes
+        }
+      },
+      {
+        populate: ['cliente', 'diseño', 'tatuador'] // Popula relaciones si es necesario
+      }
+    );
+
+    res.status(200).json({ message: `Turnos found successfully for the month ${mes}/${year}`, data: turnos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
 
 
-export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth, findTurnosByTatuadorForLastThreeMonths, findAllTurnosForCurrentMonth,findAllTurnosForSpecificMonth}
+
+
+export { findAll, findOne, add, update, remove, findByTatuadorAndDate, findByCliente, findByTatuador,findTurnosByTatuadorForCurrentMonth, findTurnosByTatuadorForLastThreeMonths, findAllTurnosForCurrentMonth,findAllTurnosForSpecificMonth, findTurnosByTatuadorForSpecificMonth}
