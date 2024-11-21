@@ -30,7 +30,7 @@ export async function controlRedes(redes: string): Promise<boolean> {
     }
 
 export async function controlDni(clase: any, dni: string): Promise<boolean> {
-    if (dni.length > 8) {
+    if ((dni.length > 8) || (dni.length < 6)) {
         return false;
     }
     else return true;

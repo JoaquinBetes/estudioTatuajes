@@ -68,7 +68,19 @@ async function add(req: Request, res: Response) {
       }
       const horaFin = moment(req.body.hora_fin, 'HH:mm:ss').format('HH:mm:ss');
       const fechaTurno = moment(req.body.fecha_turno).format('YYYY-MM-DD');
+      // Validar que la fecha no sea anterior a la actual
+      const fechaActual = moment().startOf('day');
+      const fechaSeleccionada = moment(fechaTurno, 'YYYY-MM-DD');
 
+      if (fechaSeleccionada.isBefore(fechaActual)) {
+          return res.status(400).json({ message: 'No se puede seleccionar una fecha anterior a la actual.' });
+      }
+
+      // Validar que la hora no sea anterior a la hora actual si la fecha es la actual
+      const horaActual = moment().format('HH:mm:ss');
+      if (fechaSeleccionada.isSame(fechaActual, 'day') && moment(horaInicio, 'HH:mm:ss').isBefore(moment(horaActual, 'HH:mm:ss'))) {
+          return res.status(400).json({ message: 'No se puede seleccionar una hora anterior a la actual.' });
+      }
 
       // Crear el objeto turno con los valores correctos
       const turno = em.create(Turno, {

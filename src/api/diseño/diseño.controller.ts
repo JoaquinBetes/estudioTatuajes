@@ -4,6 +4,7 @@ import { Diseño } from './diseño.entity.js'
 import { Tatuador } from '../tatuador/tatuador.entity.js'
 import { Categoria } from '../categoria/categoria.entity.js'
 import { controlEstado } from '../shared/reglas.js'
+import { runInNewContext } from 'vm'
 
 
 const em = orm.em
@@ -109,12 +110,24 @@ async function add(req: Request, res: Response) {
       }
 
       if(!controlEstado(req.body.estado)){
-        res.status(500).json({ message: "El Estado ingresado no es válido"})
+        return res.status(400).json({ message: "El Estado ingresado no es válido"})
+      }
+
+      if (req.body.tamanio_aproximado == 0) {
+        return res.status(400).json({ message: 'El tamaño aproximado es obligatorio' });
+      }
+      if (req.body.colores.length == 0) {
+        return res.status(400).json({ message: 'Ingresar colores' });
       }
 
       // Verificar si req.file existe antes de acceder a filename
       if (!req.file) {
           return res.status(400).json({ message: 'Ingrese una imagen' });
+      }
+      // Verificar que el archivo sea de tipo JPG o PNG
+      const allowedMimeTypes = ['image/jpeg', 'image/png'];
+      if (!allowedMimeTypes.includes(req.file.mimetype)) {
+          return res.status(400).json({ message: 'El archivo debe ser una imagen en formato JPG o PNG' });
       }
 
       // Obtener la ruta de la imagen

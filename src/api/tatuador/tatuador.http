@@ -32,4 +32,4 @@ Content-Type: application/json
 }
 
 ### Delete
-DELETE  http://localhost:3000/api/tatuador/39453711
+DELETE  http://localhost:3000/api/tatuador/39453707

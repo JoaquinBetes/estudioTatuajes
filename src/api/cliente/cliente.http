@@ -20,21 +20,21 @@ POST http://localhost:3000/api/cliente
 Content-Type: application/json
 
 {
-    "dni": 39453999,
-    "nombreCompleto": "Martin Rodriguez",
-    "email": "vetesjoaquin@gmail.com",
+    "dni": 99999999,
+    "nombreCompleto": "admin",
+    "email": "admin@admin.com",
     "telefono": "03413041923",
-    "estado": 3,
-    "contraseña":"genius123"
+    "estado": -99,
+    "contraseña":"admin123"
 }
 
 ### Update
-PUT http://localhost:3000/api/cliente/99999999
+PUT http://localhost:3000/api/cliente/39453700
 Content-Type: application/json
 
 {
-    "estado": -99
+    "estado": 0
 }
 
 ### Delete
-DELETE  http://localhost:3000/api/cliente/39453711
+DELETE  http://localhost:3000/api/cliente/39453704

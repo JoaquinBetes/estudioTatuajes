@@ -22,7 +22,7 @@ async function findOne(req: Request, res: Response){
     const dni = Number.parseInt(req.params.dni)
     const tatuador = await em.findOne(Tatuador, {dni})
     if (tatuador === null){
-      res.status(404).json({ message: 'tatuador was not found'})
+      return res.status(404).json({ message: 'no se ha encontrado al tatuador'})
     }
     res.status(200).json({ message: 'Find tatuador succesfully' , data: tatuador })
   } catch (error: any) {
@@ -59,6 +59,9 @@ async function add(req: Request, res: Response) {
     if (!contraseñaValida) {
       return res.status(409).json({ message: 'La contraseña ingresada no es valida' });
     }
+    if (req.body.nombreCompleto.trim().length === 0 || /\d/.test(req.body.nombreCompleto)) {
+      return res.status(409).json({ message: 'Debe ingresar un nombre válido (no vacío y sin números)' });
+    }  
   // Si ambos están disponibles, crea el Tatuador
     const tatuador = em.create(Tatuador, req.body)
     await em.flush()
@@ -123,7 +126,7 @@ async function remove(req: Request, res: Response) {
     const tatuador = await em.findOne(Tatuador, {dni}, {populate:['liquidaciones','turnos', 'diseños']})
     // Verificar si la categoría existe
     if (!tatuador) {
-      return res.status(404).json({ message: 'tatuador not found' });
+      return res.status(404).json({ message: 'tatuador no encontrado' });
     }
     await em.removeAndFlush(tatuador)
     res.status(200).json({message: 'tatuador removed succesfully'})

@@ -10,10 +10,10 @@ POST http://localhost:3000/api/horariosAtencion
 Content-Type: application/json
 
 {
-  "sucursal_id": 2,
-  "hora_apertura": "14:00:00",
-  "hora_cierre": "22:00:00",
-  "dia_semana": "Sabados"
+  "sucursal_id": 1,
+  "hora_apertura": "12:00:00",
+  "hora_cierre": "20:00:00",
+  "dia_semana": "Sabado"
 }
 
 ### Update

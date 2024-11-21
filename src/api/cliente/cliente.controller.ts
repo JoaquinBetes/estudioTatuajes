@@ -29,6 +29,9 @@ async function findOne(req: Request, res: Response){
 
 async function add(req: Request, res: Response) {
   try {
+    if(req.body.dni === null){
+      return res.status(409).json({ message: 'Ingrese un DNI' });
+    }
     const dniValida = await controlDni(Cliente, req.body.dni.toString())
     if (!dniValida) {
       return res.status(409).json({ message: 'El DNI ingresado no es valido' });
@@ -56,6 +59,9 @@ async function add(req: Request, res: Response) {
     if (!contraseñaValida) {
       return res.status(409).json({ message: 'La contraseña ingresada no es valida' });
     }
+    if (req.body.nombreCompleto.trim().length === 0 || /\d/.test(req.body.nombreCompleto)) {
+      return res.status(409).json({ message: 'Debe ingresar un nombre válido (no vacío y sin números)' });
+    }  
     // Si ambos están disponibles, crea el cliente
     const cliente = em.create(Cliente, req.body);
     await em.flush();
